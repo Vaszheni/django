@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from .models import Bd
 from django.template import loader
@@ -11,3 +11,17 @@ def index(request):
     context = {'books': books}
 
     return HttpResponse(template.render(context, request))
+
+
+def products(requsest):
+    books = Bd.objects.all()
+    response = []
+    for book in books:
+        response.append(
+            {
+                "id": book.id,
+                "title": book.name,
+                "price": book.price
+            }
+        )
+    return JsonResponse(response, safe=False)
